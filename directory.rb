@@ -1,8 +1,18 @@
-def input_students
-  puts "Please enter the names of the students, and their cohort month"
-  puts "To finish, just hit return twice"
+def interactive_menu
   # create an empty array
   students = []
+  loop do
+    # 1. print the menu and ask the user what to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" # 9 because we'll be adding more items
+    # 2. read the input and save it into a variable
+    selection = gets.chomp
+    # 3. do what the user has asked
+    case selection
+      when "1"
+        students = input_students
+        
   # get the first name
   name = gets.chomp
   # while the name is not empty, repeat this code
