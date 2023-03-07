@@ -1,35 +1,44 @@
+@students = [] # an empty array accessible to all methods
+
 def interactive_menu
-  # create an empty array
-  students = []
   loop do
-    # 1. print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # 9 because we'll be adding more items
-    # 2. read the input and save it into a variable
+    print_menu
     selection = gets.chomp
     # 3. do what the user has asked
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit # this will cause the program to terminate
-    else
-      puts "I don't know what you meant, try again"
-    end
+    process(selection)
   end
 end
-        
+
+def process(selection)
+  case selection
+  when "1"
+    students = input_students
+  when "2"
+    show_students
+  when "9"
+    exit # this will cause the program to terminate
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+def print_menu
+  # 1. print the menu and ask the user what to do
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+  # 2. read the input and save it into a variable
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
         
 def input_students
   puts "Please enter the names of the students, and their cohort month"
   puts "To finish, just hit return twice"
-  # create an empty array
-  students = []
   # get the first name
   name = gets.chomp
   # while the name is not empty, repeat this code
@@ -38,13 +47,11 @@ def input_students
     puts "Enter cohort month"
     cohort = gets.delete("\n").to_sym
     cohort = :november if cohort.empty?
-    students << {name: name, cohort: cohort}
-    puts students.length == 1 ? "Now we have 1 student" : "Now we have #{students.count} students"
+    @students << {name: name, cohort: cohort}
+    puts @students.length == 1 ? "Now we have 1 student" : "Now we have #{@students.count} students"
     # get another name from the user
     name = gets.chomp
   end
-  # return the array of students
-  students
 end
 
 def print_header
@@ -52,8 +59,8 @@ def print_header
   puts "-------------".center(50)
 end
 
-def print(students)
-  grouped_students = students.group_by do |student| 
+def print_students_list
+  grouped_students = @students.group_by do |student| 
     student.delete(:cohort)
   end.transform_values do |names|
     names.map { |names| names[:name] }
@@ -64,8 +71,8 @@ def print(students)
   end
 end
 
-def print_footer(names)
-  puts "Overall, we have #{names.count} great students".center(50)
+def print_footer
+  puts "Overall, we have #{@students.count} great students".center(50)
 end
 
 interactive_menu
