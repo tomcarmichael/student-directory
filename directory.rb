@@ -1,3 +1,4 @@
+require "csv"
 @students = [] # an empty array accessible to all methods
 
 def interactive_menu
@@ -44,7 +45,6 @@ def print_success_message
 end
   
 
-
 def add_to_students_array(name, cohort="november")
   # Takes a name and a cohort month as strings
   cohort = cohort.delete("\n").to_sym
@@ -54,14 +54,11 @@ end
 
 def load_students(filename="students.csv")
   if File.exist?(filename)
-    File.open(filename, "r") do |file|
-      ### resets the array so we dont duplicate student data if we load more than once
-      @students = []
-      file.readlines.each do |line|
-        name, cohort = line.chomp.split(",")
+    # resets the array so we dont duplicate student data if we load more than once
+    @students = []
+    CSV.foreach(filename) do |row|
+        name, cohort =row
         add_to_students_array(name, cohort)
-      end
-      file.close
     end
     print_success_message
   else
