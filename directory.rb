@@ -54,14 +54,15 @@ end
 
 def load_students(filename="students.csv")
   if File.exist?(filename)
-    file = File.open(filename, "r")
-    ### resets the array so we dont duplicate student data if we load more than once
-    @students = []
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(",")
-      add_to_students_array(name, cohort)
+    File.open(filename, "r") do |file|
+      ### resets the array so we dont duplicate student data if we load more than once
+      @students = []
+      file.readlines.each do |line|
+        name, cohort = line.chomp.split(",")
+        add_to_students_array(name, cohort)
+      end
+      file.close
     end
-    file.close
     print_success_message
   else
     puts "File not found"
